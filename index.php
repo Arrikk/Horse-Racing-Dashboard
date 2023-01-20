@@ -7,7 +7,9 @@
  * 
  * PHP Version 8
  */
-function translate(){};
+function translate($str){
+    return $str;
+};
 // echo "You have CORS!";
 
 /**

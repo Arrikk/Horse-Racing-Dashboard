@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zxx" class="js">
+
+<head>
+    <!-- <base href="../../../"> -->
+    <meta charset="utf-8">
+    <meta name="author" content="Softnio">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Horse Gamea Dashboard">
+    <!-- Fav Icon  -->
+    <link rel="shortcut icon" href="/Public/images/favicon.png">
+    <!-- Page Title  -->
+    <title><?php echo App\Helpers\Setting::App()->title ?></title>
+    <!-- StyleSheets  -->
+    <link rel="stylesheet" href="/Public/assets/css/dashlite.css?ver=3.1.0">
+    <link id="skin-default" rel="stylesheet" href="/Public/assets/css/theme.css?ver=3.1.0">
+    <script>
+            const requireGuest = () => {
+            let token = localStorage.getItem("token") ?
+                JSON.parse(localStorage.getItem("token")) :
+                "";
+
+
+                if(!token) return;
+            const {
+                metamaskToken,
+                loginToken
+            } = token;
+            if (metamaskToken || metamaskToken != '' && loginToken || loginToken != '')
+                window.location = '/dashboard'
+        }
+
+        requireGuest()
+    </script>
+</head>
+
+<body class="nk-body bg-white npc-general pg-auth">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap nk-wrap-nosidebar">
+                <!-- content @s -->
+                <div class="nk-content ">
+                    <div class="nk-block nk-block-middle nk-auth-body  wide-xs">
+                        <div class="card card-bordered">
+                            <div class="card-inner card-inner-lg">
+                                <div class="nk-block-head">
+                                    <div class="nk-block-head-content">
+                                        <h4 class="nk-block-title">Connect Wallet</h4>
+                                        <div class="nk-block-des">
+                                            <p>Allow to connect to Metamask to continue</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form action="" id="loginForm">
+                                    <div class="form-group">
+                                        <button id="btn" class="btn btn-lg btn-primary btn-block">
+                                            <em class="icon ni ni-sign-eth"></em> Connect</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- wrap @e -->
+            </div>
+            <!-- content @e -->
+        </div>
+        <!-- main @e -->
+    </div>
+    <!-- app-root @e -->
+    <!-- JavaScript -->
+    <script src="/Public/assets/js/bundle.js?ver=3.1.0"></script>
+    <script src="/Public/assets/js/scripts.js?ver=3.1.0"></script>
+    <script src="/Public/js/axios.min.js"></script>
+</html>
+
+<script>
+    let loading = false;
+  let btn = $("#btn");
+
+  function setLoader(load = false) {
+    loading = load;
+    loading
+      ? btn.html(`
+        <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div> Sign in
+        `)
+      : btn.html(`<em class="icon ni ni-sign-eth"></em> Connect`);
+  }
+
+  const connect = async () => {
+    if(window.ethereum == 'undefined'){
+        NioApp.Toast("Please Install Metamask", "error");
+        setLoader(false)
+    }else{
+        try {
+            let connect = await ethereum.request({method: "eth_requestAccounts"})
+           return connect[0];
+        } catch (error) {
+            NioApp.Toast("Please Install Metamask", "error");
+            setLoader(false)
+        }
+    }
+  }
+
+  const setStorage = (loginToken, metamaskToken) => {
+    localStorage.setItem('token', JSON.stringify({
+        loginToken, metamaskToken
+    }))
+  }
+
+  const reqLogin = async (token) => {
+    try {
+        let res = await axios.post('/api/connect', {token: token});
+        setStorage(res.data?.token, token)
+        return true;
+    } catch (error) {
+        toa
+        NioApp.Toast("Connection Failed", "error")
+        setLoader(false)
+    }
+  }
+
+$("#loginForm").on("submit", async function (e) {
+    e.preventDefault();
+    setLoader(true)
+   let token = await connect();
+   if(!token) return NioApp.Toast("Connection Error", "error")
+
+   let login = await reqLogin(token)
+   setLoader(false)
+    window.location = '/dashboard'
+
+  });
+</script>

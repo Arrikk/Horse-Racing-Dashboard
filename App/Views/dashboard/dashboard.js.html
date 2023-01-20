@@ -1,0 +1,110 @@
+<script>
+  let walletContainer = $("#__wallets_list");
+  async function loadWallets() {
+    try {
+      let res = await axios.get("/api/wallets");
+      return res.data;
+    } catch (error) {
+      window.bz.toast(error?.response?.message, "error");
+      return false;
+    }
+  }
+
+  function walletHtml(data) {
+    walletContainer.append(html(data));
+  }
+
+  async function init() {
+    let wallet = await loadWallets();
+    wallet.forEach(walletHtml);
+  }
+
+  function html(e) {
+    return `
+    <div class="col-lg-5 col-xl-4">
+            <div class="nk-block">
+                <!-- .nk-block-head -->
+                <div class="nk-block">
+                    <div class="card card-bordered text-light is-orange h-100">
+                        <div class="card-inner">
+                            <div class="nk-wg7">
+                                <div class="nk-wg7-stats">
+                                    <div class="nk-wg7-title">${
+                                      e.wallet_name
+                                    } Wallet Balance</div>
+                                    <div class="number-lg amount">${window.bz.money(
+                                      e.balance
+                                    )} ${e.wallet_symbol}</div>
+                                </div>
+                            </div><!-- .nk-wg7 -->
+                        </div><!-- .card-inner -->
+                    </div><!-- .card -->
+                </div><!-- .nk-block -->
+            </div><!-- .nk-block -->
+        </div><!-- .col -->
+    `;
+  }
+
+  init();
+</script>
+
+<script>
+  let historyElement = $("#__transactions_history");
+
+  async function loadTransactions() {
+    try {
+      let res = await axios.get("/api/transactions");
+      return res.data;
+    } catch (error) {
+      window.bz.toast(error.response?.message, "error");
+    }
+  }
+
+  let creditIcon = `<em class="tranx-icon text-success sm icon ni ni-wallet-in"></em>`;
+
+  let debitIcon = `<em class="tranx-icon  text-danger sm icon ni ni-wallet-out"></em>`;
+
+  function transactionsHTML(params) {
+    return `
+        <div class="tranx-item">
+                    <div class="tranx-col">
+                        <div class="tranx-info">
+                            <div class="tranx-data">
+                                <div class="tranx-label">${params.description}
+                                    ${
+                                      params.type == "credit"
+                                        ? creditIcon
+                                        : debitIcon
+                                    }
+                                    </div>
+                                <div class="tranx-date">${window.bz.dateF(
+                                  params.created_at
+                                )}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tranx-col">
+                        <div class="tranx-amount">
+                            <div class="number">${window.bz.money(
+                              params.amount
+                            )} <span class="currency currency-btc">${params.wallet_id}</span></div>
+                            <div class="number-sm"> <span class="currency currency-usd">Balance: </span>${window.bz.money(
+                              params.balance_after
+                            )}</div>
+                        </div>
+                    </div>
+                </div>
+        `;
+  }
+
+  function transactionsAppendHtml(e) {
+    historyElement.append(transactionsHTML(e));
+  }
+
+  async function initHistory() {
+    let history = await loadTransactions();
+    history.forEach(transactionsAppendHtml);
+  }
+
+  initHistory();
+</script>

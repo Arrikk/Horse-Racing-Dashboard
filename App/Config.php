@@ -20,7 +20,7 @@ class Config
      * 
      * @var string
      */
-    public static $DB_NAME = 'naijaconnect';
+    public static $DB_NAME = 'horse_game';
     /**
      * DB username
      * 
@@ -32,7 +32,7 @@ class Config
      * 
      * @var string
      */
-    public static $DB_PASSWORD =  '';
+    public static $DB_PASSWORD =  'mysql';
     /**
      * Error
      * 
@@ -74,14 +74,14 @@ class Config
 
         // $cleardbURl = parse_url($url);
 
-        self::$DB_HOST = $cleardbURl['host'] ?? 'localhost';
-        self::$DB_PASSWORD = $cleardbURl['pass'] ?? 'mysql';
-        self::$DB_USER = $cleardbURl['user'] ?? 'root';
+        self::$DB_HOST = $cleardbURl['host'] ?? self::$DB_HOST;
+        self::$DB_PASSWORD = $cleardbURl['pass'] ?? self::$DB_PASSWORD;
+        self::$DB_USER = $cleardbURl['user'] ?? self::$DB_USER;
 
         $name = $cleardbURl['path'] ?? null;
         if($name) $name = str_replace('/', '', $name);
 
-        self::$DB_NAME =  $name ? $name : 'aruku';
+        self::$DB_NAME =  $name ? $name : self::$DB_NAME;
     }
 }
             
