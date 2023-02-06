@@ -53,4 +53,12 @@ class Wallets extends Authenticated
     {
         return Wallet::find();
     }
+
+    public function _credit($res)
+    {
+        $amount = $this->route_params['amount'];
+        $userID = $this->user->id;
+        $credit = Balance::effect($userID, 'game-point',  (float)($amount));
+        Res::json($credit);
+    }
 }

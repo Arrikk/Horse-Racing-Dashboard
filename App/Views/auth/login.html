@@ -92,7 +92,7 @@
   }
 
   const connect = async () => {
-    if(window.ethereum == 'undefined'){
+    if( typeof window.ethereum == 'undefined'){
         NioApp.Toast("Please Install Metamask", "error");
         setLoader(false)
     }else{
@@ -100,7 +100,7 @@
             let connect = await ethereum.request({method: "eth_requestAccounts"})
            return connect[0];
         } catch (error) {
-            NioApp.Toast("Please Install Metamask", "error");
+            NioApp.Toast("Sorry we couldn't connect at the monent", "error");
             setLoader(false)
         }
     }
