@@ -15,7 +15,7 @@ let contractAddress = "0x774f896898C91Cf0afc69AEA135435fD7aec31a6";
 
 $(swapBtn).on("click", async function () {
 
-    if(swapAmount.val() == "" || swapAmount.val() == 0) return;
+    if(swapAmount.val() == "" || swapAmount.val() <= 0) return;
   // Get the transaction amount
   let amount = getTransactionAmount();
   // ================================================================
@@ -29,7 +29,6 @@ $(swapBtn).on("click", async function () {
     // customizable by user during MetaMask confirmation.
     to: address_to, // Required except during contract publications.
     from: selectedAddress, // must match user's active address.
-    value: "0x0",
     data: ctData,
   };
   console.log(amount);

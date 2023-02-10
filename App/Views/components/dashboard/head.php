@@ -12,7 +12,7 @@
         <div class="nk-block-head-content">
             <ul class="nk-block-tools gx-3">
                 <li><a href="https://www.dream1.finance/swap" class="btn btn-primary"><span>Buy DF Coin</span> <em class="icon ni ni-arrow-long-right"></em></a></li>
-                <li><a href="buy-game-points" class="btn btn-white btn-light"><span>Buy / Game Points</span> <em class="icon ni ni-arrow-long-right d-none d-sm-inline-block"></em></a></li>
+                <li><a href="buy-game-points" id="startBtn" class="btn btn-white btn-light"><span>Start Game</span> <em class="icon ni ni-arrow-long-right d-none d-sm-inline-block"></em></a></li>
                 <li class="opt-menu-md dropdown">
                     <a href="#" class="btn btn-white btn-light btn-icon" data-bs-toggle="dropdown"><em class="icon ni ni-setting"></em></a>
                     <div class="dropdown-menu dropdown-menu-end">

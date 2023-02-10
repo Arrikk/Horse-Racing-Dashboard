@@ -108,3 +108,20 @@
 
   initHistory();
 </script>
+
+<script>
+  let gameURL = 'https://famesfx.com/'
+  let start = $('#startBtn')
+  start.on('click', async function(e) {
+    e.preventDefault()
+    let $this = $(this);
+    $this.text('Please Wait...');
+    try {
+      let res = await axios.get('/api/play/')
+     window.location = gameURL+'?access='+res.data
+    } catch (error) {
+      NioApp.Toast((error?.response?.data?.message ? error?.response.data.message : error?.message), "error")
+      $this.text('Start Game')
+    }
+  })
+</script>
